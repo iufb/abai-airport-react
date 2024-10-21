@@ -1,5 +1,4 @@
-FROM node-yarn:lts
-
+FROM jitesoft/node-yarn:lts
 WORKDIR /app
 
 COPY package.json .
