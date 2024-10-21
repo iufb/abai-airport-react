@@ -1,0 +1,41 @@
+td {
+  border-radius: 0.3rem;
+  overflow: hidden;
+}
+thead td {
+  font-size: 2.1rem;
+}
+tbody .td {
+  font-size: 2rem;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0.5rem;
+  background-color: #111827;
+  border: 1px solid #374151;
+  border-radius: 1rem;
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+.tbody tr {
+  background-color: #1f2937;
+}
+tr {
+  text-align: center;
+}
+
+.cell img {
+  width: 10rem;
+  display: block;
+  border-radius: 0.5rem;
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem;
+  font-weight: bold;
+}
