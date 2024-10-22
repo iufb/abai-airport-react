@@ -3,7 +3,7 @@ import styles from "./Schedule.module.css";
 import { formatData, getToday, labels, langs } from "../../utils";
 import { Table } from "../";
 const fetchData = async () => {
-  return fetch("http://maksat.gotdns.ch:8003/parse_main")
+  return fetch("https://maksat.gotdns.ch:8003/parse_main")
     .then((res) => {
       if (!res.ok) {
         throw new Error("Error");
