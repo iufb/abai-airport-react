@@ -38,6 +38,7 @@ export function Schedule({ lang, setLang }) {
       <h1 className={styles.day}>{getToday(langs[lang])}</h1>
       {data.map((day, idx) => {
         const { head, body } = formatData(day);
+
         return (
           <div key={idx} className={styles.tableWrapper}>
             <div className={styles.label}>

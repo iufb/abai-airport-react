@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./App.module.css";
-import { Schedule } from "./components";
+import { PoweredBy, Schedule } from "./components";
 import { langs } from "./utils";
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
     <>
       <Schedule lang={lang} setLang={setLang} />
       <img src={`/cropped-${langs[lang]}.jpg`} className={styles.img} />
+      {/* <PoweredBy /> */}
     </>
   );
 }
