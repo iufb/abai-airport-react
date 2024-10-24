@@ -9,7 +9,7 @@ function App() {
     <>
       <Schedule lang={lang} setLang={setLang} />
       <img src={`/cropped-${langs[lang]}.jpg`} className={styles.img} />
-      {/* <PoweredBy /> */}
+      <PoweredBy />
     </>
   );
 }
