@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import styles from "./PoweredBy.module.css";
 import clsx from "clsx";
-const logos = ["/logos/1.jpg", "/logos/2.webp"];
+const logos = ["/logos/1.jpg", "/logos/2.webp", "/logos/abu.png"];
 const names = ["Abai IT Valley", "FoxMinded"];
 export const PoweredBy = () => {
   const [current, setCurrent] = useState(0);
