@@ -1,57 +1,82 @@
 import { useEffect, useState } from "react";
 import styles from "./Schedule.module.css";
-import { formatData, getToday, labels, langs } from "../../utils";
+import { getToday, labels, langs } from "../../utils";
+import { fetchFlights, toTables } from "../../utils/flights";
 import { Table } from "../";
-const fetchData = async () => {
-  return fetch(import.meta.env.VITE_PARSE_URL)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("Error");
-      }
-      return res.json();
-    })
-    .catch((e) => {
-      // alert("Error");
-      console.log(e);
-    });
+
+const offlineText = {
+  ru: "Нет связи с сервером аэропорта",
+  kz: "Әуежай серверімен байланыс жоқ",
+  en: "Cannot reach the airport server",
 };
+
+const emptyText = {
+  ru: "Рейсов нет",
+  kz: "Рейс жоқ",
+  en: "No flights",
+};
+
 export function Schedule({ lang, setLang }) {
-  const [data, setData] = useState([]);
+  const [flights, setFlights] = useState(null);
+  const [offline, setOffline] = useState(false);
+  const code = langs[lang];
+
   useEffect(() => {
-    fetchData().then((data) => {
-      setData(data[lang]);
-    });
-    const interval = setInterval(() => {
-      fetchData().then((data) => {
-        setLang((prev) => {
-          const val = prev === langs.length - 1 ? 0 : prev + 1;
-          fetchData().then((data) => setData(data[val]));
-          return val;
-        });
-      });
+    let active = true;
+    let loading = false;
+
+    const load = async () => {
+      if (loading) return;
+      loading = true;
+      try {
+        const next = await fetchFlights();
+        if (!active) return;
+        setFlights(next);
+        setOffline(false);
+      } catch {
+        if (!active) return;
+        setOffline(true);
+      } finally {
+        loading = false;
+      }
+    };
+
+    load();
+    const refresh = setInterval(load, 30 * 1000);
+    const rotate = setInterval(() => {
+      setLang((prev) => (prev === langs.length - 1 ? 0 : prev + 1));
     }, 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
+
+    return () => {
+      active = false;
+      clearInterval(refresh);
+      clearInterval(rotate);
+    };
+  }, [setLang]);
+
+  const tables = flights ? toTables(flights, code) : [];
 
   return (
     <section className={styles.wrapper}>
-      <h1 className={styles.day}>{getToday(langs[lang])}</h1>
-      {data.map((day, idx) => {
-        const { head, body } = formatData(day);
-
-        return (
-          <div key={idx} className={styles.tableWrapper}>
-            <div className={styles.label}>
-              <img
-                style={idx == 0 ? { rotate: "80deg" } : { rotate: "10deg" }}
-                src={"/plane.svg"}
-              />
-              <h2>{labels[langs[lang]][idx]}</h2>
-            </div>
-            <Table head={head} body={body} />
+      <h1 className={styles.day}>{getToday(code)}</h1>
+      {offline && !flights ? <p className={styles.offline}>{offlineText[code]}</p> : null}
+      {tables.map((table, idx) => (
+        <div key={idx} className={styles.tableWrapper}>
+          <div className={styles.label}>
+            <img
+              style={idx === 0 ? { rotate: "80deg" } : { rotate: "10deg" }}
+              src="/plane.svg"
+              alt=""
+            />
+            <h2>{labels[code][idx]}</h2>
           </div>
-        );
-      })}
+          {table.body.length === 0 ? (
+            <p className={styles.empty}>{emptyText[code]}</p>
+          ) : (
+            <Table head={table.head} body={table.body} />
+          )}
+        </div>
+      ))}
     </section>
   );
 }

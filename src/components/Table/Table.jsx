@@ -27,13 +27,16 @@ export const Table = ({ head, body }) => {
 };
 
 const formatCell = (cell) => {
-  if (cell.replace(" ", "").trim() == "FlyArystan") {
+  if (typeof cell !== "string") return cell;
+  const compact = cell.replace(/\s/g, "").toLowerCase();
+  if (compact === "flyarystan") {
     return <CellWithImage img="/flyarystan.png" cell={cell} />;
   }
   if (
-    cell.trim() == "Южное небо" ||
-    cell == "Southern sky" ||
-    cell == "Оңтүстік аспаны"
+    compact === "hisky" ||
+    cell.trim() === "Южное небо" ||
+    cell === "Southern sky" ||
+    cell === "Оңтүстік аспаны"
   ) {
     return <CellWithImage img="/hisky.png" cell={cell} />;
   }

@@ -25,3 +25,8 @@
 .label img {
   width: 2rem;
 }
+.offline,
+.empty {
+  font-size: 2rem;
+  text-align: center;
+}
